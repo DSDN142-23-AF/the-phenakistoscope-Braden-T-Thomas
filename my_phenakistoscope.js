@@ -1,7 +1,7 @@
-const SLICE_COUNT = 10;
+const SLICE_COUNT = 20;
 
 function setup_pScope(pScope){
-  pScope.output_mode(ANIMATED_DISK);
+  pScope.output_mode(OUTPUT_GIF(500)); //STATIC_FRAME
   pScope.scale_for_screen(true);
   pScope.draw_layer_boundaries(false);
   pScope.set_direction(CCW);
@@ -12,16 +12,45 @@ function setup_layers(pScope){
 
   new PLayer(null, 220);  //lets us draw the whole circle background, ignoring the boundaries
 
-  var layer1 = new PLayer(faces);
-  layer1.mode( SWIRL(5) );
+  var layer1 = new PLayer(eyes);
+  layer1.mode( RING );
   layer1.set_boundary( 200, 1000 );
 
-  var layer2 = new PLayer(squares);
-  layer2.mode( RING );
-  layer2.set_boundary( 0, 400 );
+  //var layer2 = new PLayer(squares);
+  //layer2.mode( RING );
+  //layer2.set_boundary( 0, 400 );
 }
 
-function faces(x, y, animation, pScope){
+function eyes(x, y, animation, pScope){
+  let eye_y_val = -850;
+  let top_eyelid = eye_y_val  
+  let bottom_eyelid = eye_y_val  
+  
+  top_eyelid = top_eyelid - 50 * (3.75 * ((animation.frame) * (animation.frame -1)));
+  bottom_eyelid = bottom_eyelid + 50 * (3.75 *((animation.frame) * (animation.frame -1)));
+
+  //Top eyelid
+  noFill();
+  strokeWeight(6);
+  beginShape();
+  curveVertex(-125, eye_y_val);
+  curveVertex(-125, eye_y_val);
+  curveVertex(0, top_eyelid);
+  curveVertex(125, eye_y_val);
+  curveVertex(125, eye_y_val);
+  endShape();
+
+  //Bottom eyelid
+  beginShape();
+  curveVertex(-125, eye_y_val);
+  curveVertex(-125, eye_y_val);
+  curveVertex(0, bottom_eyelid);
+  curveVertex(125, eye_y_val);
+  curveVertex(125, eye_y_val);
+  endShape();
+}
+
+/*function faces(x, y, animation, pScope){
   
   scale(animation.frame*2);
 
@@ -31,9 +60,9 @@ function faces(x, y, animation, pScope){
   ellipse(10,-10,10,10); // draw eye
   arc(0,10,20,10,0,180); // draw mouth
 
-}
+}*/
 
-function squares(x, y, animation, pScope){
+/*function squares(x, y, animation, pScope){
 
   // this is how you set up a background for a specific layer
   let angleOffset = (360 / SLICE_COUNT) / 2
@@ -46,4 +75,4 @@ function squares(x, y, animation, pScope){
   fill(255)
   rect(-10,-300-animation.wave()*50,20,20) // .wave is a cosine wave btw
 
-}
+}*/
