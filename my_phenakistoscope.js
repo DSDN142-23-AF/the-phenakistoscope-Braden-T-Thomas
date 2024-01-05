@@ -1,7 +1,7 @@
 const SLICE_COUNT = 20;
 
 function setup_pScope(pScope){
-  pScope.output_mode(OUTPUT_GIF(500)); //STATIC_FRAME
+  pScope.output_mode(STATIC_FRAME); //STATIC_FRAME
   pScope.scale_for_screen(true);
   pScope.draw_layer_boundaries(false);
   pScope.set_direction(CCW);
@@ -10,7 +10,7 @@ function setup_pScope(pScope){
 
 function setup_layers(pScope){
 
-  new PLayer(null, 220);  //lets us draw the whole circle background, ignoring the boundaries
+  new PLayer(null, 6, 16, 56);  //lets us draw the whole circle background, ignoring the boundaries
 
   var layer1 = new PLayer(eyes);
   layer1.mode( RING );
@@ -25,14 +25,56 @@ function eyes(x, y, animation, pScope){
   let eye_y_val = -850;
   let top_eyelid = eye_y_val  
   let bottom_eyelid = eye_y_val  
-  
-  top_eyelid = top_eyelid - 50 * (3.75 * ((animation.frame) * (animation.frame -1)));
-  bottom_eyelid = bottom_eyelid + 50 * (3.75 *((animation.frame) * (animation.frame -1)));
+  let eye_under_top_eyelid = eye_y_val - 50
+  let eye_under_bottom_eyelid = eye_y_val + 50
 
+  top_eyelid = top_eyelid - 50 * (-3.75 * ((animation.frame) * (animation.frame -1)));
+  bottom_eyelid = bottom_eyelid + 50 * (-3.75 *((animation.frame) * (animation.frame -1)));
+  
+
+  //Eye under layer
+  beginShape();
+  fill(255, 255, 255);
+  strokeWeight(6);
+  curveVertex(-125, eye_y_val);
+  curveVertex(-125, eye_y_val);
+  curveVertex(0, eye_under_top_eyelid);
+  curveVertex(125, eye_y_val);
+  curveVertex(125, eye_y_val);
+  endShape();
+
+  beginShape();
+  curveVertex(-125, eye_y_val);
+  curveVertex(-125, eye_y_val);
+  curveVertex(0, eye_under_bottom_eyelid);
+  curveVertex(125, eye_y_val);
+  curveVertex(125, eye_y_val);
+  endShape();
+
+  // Iris
+  fill(0, 0, 0);
+  strokeWeight(0);
+  ellipseMode(CENTER);
+  ellipse(0, -850, 75);
+
+
+  stroke(26,36,96);
   //Top eyelid
+  fill(6,16,56);
+  beginShape();
+  strokeWeight(0);
+  curveVertex(-125, eye_y_val-60);
+  curveVertex(-125, eye_y_val-60);
+  curveVertex(-125, eye_y_val-2);
+  curveVertex(0, top_eyelid);
+  curveVertex(125, eye_y_val-2);
+  curveVertex(125, eye_y_val-60);
+  curveVertex(125, eye_y_val-60);
+  endShape();
+
+  beginShape();
   noFill();
   strokeWeight(6);
-  beginShape();
   curveVertex(-125, eye_y_val);
   curveVertex(-125, eye_y_val);
   curveVertex(0, top_eyelid);
@@ -40,8 +82,23 @@ function eyes(x, y, animation, pScope){
   curveVertex(125, eye_y_val);
   endShape();
 
+
   //Bottom eyelid
+  fill(6,16,56);
   beginShape();
+  strokeWeight(0);
+  curveVertex(-125, eye_y_val+60);
+  curveVertex(-125, eye_y_val+60);
+  curveVertex(-125, eye_y_val+2);
+  curveVertex(0, bottom_eyelid);
+  curveVertex(125, eye_y_val+2);
+  curveVertex(125, eye_y_val+60);
+  curveVertex(125, eye_y_val+60);
+  endShape();
+
+  beginShape();
+  noFill();
+  strokeWeight(6)
   curveVertex(-125, eye_y_val);
   curveVertex(-125, eye_y_val);
   curveVertex(0, bottom_eyelid);
@@ -49,6 +106,8 @@ function eyes(x, y, animation, pScope){
   curveVertex(125, eye_y_val);
   endShape();
 }
+
+
 
 /*function faces(x, y, animation, pScope){
   
