@@ -1,10 +1,10 @@
 const SLICE_COUNT = 20;
 
 function setup_pScope(pScope){
-  pScope.output_mode(STATIC_FRAME); //STATIC_FRAME
+  pScope.output_mode(ANIMATED_FRAME); //STATIC_FRAME
   pScope.scale_for_screen(true);
   pScope.draw_layer_boundaries(false);
-  pScope.set_direction(CCW);
+  pScope.set_direction(CW);
   pScope.set_slice_count(SLICE_COUNT);
 }
 
@@ -13,12 +13,16 @@ function setup_layers(pScope){
   new PLayer(null, 6, 16, 56);  //lets us draw the whole circle background, ignoring the boundaries
 
   var layer1 = new PLayer(eyes);
-  layer1.mode( RING );
-  layer1.set_boundary( 200, 1000 );
+  layer1.mode(RING);
+  layer1.set_boundary(800, 900);
 
-  //var layer2 = new PLayer(squares);
+  //var layer2 = new PLayer(stars);
   //layer2.mode( RING );
-  //layer2.set_boundary( 0, 400 );
+  //layer2.set_boundary( 200, 1000 );
+
+  var layer3 = new PLayer(tears)
+  layer3.mode(RING);
+  layer3.set_boundary(300, 800);
 }
 
 function eyes(x, y, animation, pScope){
@@ -30,7 +34,6 @@ function eyes(x, y, animation, pScope){
 
   top_eyelid = top_eyelid - 50 * (-3.75 * ((animation.frame) * (animation.frame -1)));
   bottom_eyelid = bottom_eyelid + 50 * (-3.75 *((animation.frame) * (animation.frame -1)));
-  
 
   //Eye under layer
   beginShape();
@@ -107,31 +110,41 @@ function eyes(x, y, animation, pScope){
   endShape();
 }
 
+// Does not currently work
+function stars(x, y, animation, pScope){
+  beginShape();
+  stroke(255, 255, 255)
+  fill(255, 255, 255)
+  strokeWeight(6)
+  curveVertex(0, 200);
+  curveVertex(0, 200);
+  curveVertex(5, 205);
+  curveVertex(10, 210);
+  curveVertex(10, 210);
+  endShape();
+}
 
+function tears(x, y, animation, pScope){
 
-/*function faces(x, y, animation, pScope){
-  
-  scale(animation.frame*2);
+  let tear_y = -780
+  tear_y = tear_y * (animation.frame -1) 
 
-  ellipse(0,0,50,50); // draw head
-  fill(30);
-  ellipse(-10,-10,10,10); //draw eye
-  ellipse(10,-10,10,10); // draw eye
-  arc(0,10,20,10,0,180); // draw mouth
+  // Tear shape
+  beginShape();
+  curveVertex(0, -tear_y -44); // Beginning
+  curveVertex(0, -tear_y -44); // Beginning
+  curveVertex(-12, -tear_y -12); // curve point 1
+  curveVertex(0, -tear_y); //Mid Point
+  curveVertex(12, -tear_y -12); // curve point 2
+  curveVertex(0, -tear_y -44); // End
+  curveVertex(0, -tear_y -44); // End
+  endShape();
 
-}*/
-
-/*function squares(x, y, animation, pScope){
-
-  // this is how you set up a background for a specific layer
+  // Lake
   let angleOffset = (360 / SLICE_COUNT) / 2
   let backgroundArcStart = 270 - angleOffset;
   let backgroundArcEnd = 270 + angleOffset;
 
   fill(66, 135, 245)
-  arc(x,y,800,800,backgroundArcStart,backgroundArcEnd); // draws "pizza slice" in the background
-
-  fill(255)
-  rect(-10,-300-animation.wave()*50,20,20) // .wave is a cosine wave btw
-
-}*/
+  arc(x,y,600,600,backgroundArcStart,backgroundArcEnd); // draws "pizza slice" in the background
+}
