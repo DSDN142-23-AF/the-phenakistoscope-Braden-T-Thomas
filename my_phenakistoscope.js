@@ -1,7 +1,7 @@
 const SLICE_COUNT = 20;
 
 function setup_pScope(pScope){
-  pScope.output_mode(ANIMATED_FRAME); //STATIC_FRAME
+  pScope.output_mode(STATIC_FRAME); //STATIC_FRAME
   pScope.scale_for_screen(true);
   pScope.draw_layer_boundaries(false);
   pScope.set_direction(CW);
@@ -12,13 +12,13 @@ function setup_layers(pScope){
 
   new PLayer(null, 6, 16, 56);  //lets us draw the whole circle background, ignoring the boundaries
 
-  var layer1 = new PLayer(eyes);
-  layer1.mode(RING);
-  layer1.set_boundary(800, 900);
+  var layer1 = new PLayer(stars);
+  layer1.mode(SWIRL(1));
+  layer1.set_boundary( 500, 800 );
 
-  //var layer2 = new PLayer(stars);
-  //layer2.mode( RING );
-  //layer2.set_boundary( 200, 1000 );
+  var layer2 = new PLayer(eyes);
+  layer2.mode(RING);
+  layer2.set_boundary(800, 900);
 
   var layer3 = new PLayer(tears)
   layer3.mode(RING);
@@ -32,7 +32,9 @@ function eyes(x, y, animation, pScope){
   let eye_under_top_eyelid = eye_y_val - 50
   let eye_under_bottom_eyelid = eye_y_val + 50
 
-  top_eyelid = top_eyelid - 50 * (-3.75 * ((animation.frame) * (animation.frame -1)));
+  top_eyelid = top_eyelid -
+  
+  50 * (-3.75 * ((animation.frame) * (animation.frame -1)));
   bottom_eyelid = bottom_eyelid + 50 * (-3.75 *((animation.frame) * (animation.frame -1)));
 
   //Eye under layer
@@ -110,19 +112,39 @@ function eyes(x, y, animation, pScope){
   endShape();
 }
 
-// Does not currently work
+// Still does not work
 function stars(x, y, animation, pScope){
-  beginShape();
-  stroke(255, 255, 255)
-  fill(255, 255, 255)
-  strokeWeight(6)
-  curveVertex(0, 200);
-  curveVertex(0, 200);
-  curveVertex(5, 205);
-  curveVertex(10, 210);
-  curveVertex(10, 210);
-  endShape();
+  let size_inner = 10;
+  let size_outer = 20;
+
+  size_outer = size_outer * (0 * animation.frame);
+
+  star_gen(0, 500, size_inner, size_outer);
 }
+
+
+function star_gen(x_pos, y_pos, size_inner, size_outer){ 
+  fill(255, 255, 255);
+  star(x_pos, y_pos, size_inner, size_outer, 4);
+}
+
+
+// Taken from https://p5js.org/examples/form-star.html
+function star(x, y, radius1, radius2, npoints){
+  let angle = TWO_PI / npoints;
+  let halfAngle = angle / 2.0;
+  beginShape();
+  for (let a = 0; a < TWO_PI; a += angle) {
+    let sx = x + cos(a) * radius2;
+    let sy = y + sin(a) * radius2;
+    vertex(sx, sy);
+    sx = x + cos(a + halfAngle) * radius1;
+    sy = y + sin(a + halfAngle) * radius1;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
+}
+
 
 function tears(x, y, animation, pScope){
 
